@@ -7,8 +7,6 @@ import { projectSchema } from './schemas/project-schema';
 import { testCaseSchema } from './schemas/test-case-schema';
 import { testExecutor } from './test-executor';
 
-export const useReporter = addReporter;
-
 export default async (environments: string[], configFilePattern: string, testCaseFilePattern: string) => {
     addReporter( CLIReporter )
 

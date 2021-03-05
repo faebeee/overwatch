@@ -3,7 +3,7 @@ import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
 import { shouldTestcaseBeSkipped } from './utils/should-testcase-be-skipped';
 
-const { chromium, Response } = require( 'playwright' );
+const { chromium } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
 const TIMEOUT = 10_000;
 
@@ -11,8 +11,11 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
     if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );
     }
+    if (testCase.requireAuth && !project.loginScript) {
+        return addFail( testCase, project, `Login implementation required` );
+    }
 
-    const browser = await chromium.launch( { headless: false } );  // Or 'firefox' or 'webkit'.
+    const browser = await chromium.launch( { headless: testCase.headless ?? true } );
     const page = await browser.newPage();
 
     try {
@@ -23,6 +26,14 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
             }
         } );
 
+        if (project.pre) {
+            await project.pre( page );
+        }
+
+        if (testCase.requireAuth && project.loginScript) {
+            await project.loginScript( page );
+        }
+
         const timeout = setTimeout( () => {
             throw new Error( `${ testCase.name } timed out on ${ project.name }` );
         }, TIMEOUT );
@@ -31,6 +42,7 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
         await browser.close();
         return addSuccess( testCase, project );
     } catch (error) {
+        await browser.close();
         return addFail( testCase, project, error.message );
     }
 }
