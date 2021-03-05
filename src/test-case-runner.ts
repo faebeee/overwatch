@@ -1,19 +1,16 @@
 import { Project } from '../types/Project';
 import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
+import { shouldTestcaseBeSkipped } from './utils/should-testcase-be-skipped';
 
 const { chromium, Response } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
 const TIMEOUT = 10_000;
 
-const shouldBeSkipped = (testCase: TestCase, project: Project) => {
-    const isTestCaseInSkipClause = project.skipTestCase.includes( testCase.name );
-    const matchEnvironments = testCase.environments.length > 0 ? testCase.environments.includes( project.environment ) : true;
-    return !matchEnvironments || isTestCaseInSkipClause;
-}
+
 
 export const createTestCaseRunner = (testCase: TestCase) => async (project: Project) => {
-    if (shouldBeSkipped( testCase, project )) {
+    if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );
     }
 
@@ -38,5 +35,4 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
     } catch (error) {
         return addFail( testCase, project, error.message );
     }
-
 }

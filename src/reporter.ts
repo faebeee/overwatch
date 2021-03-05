@@ -21,4 +21,4 @@ export const addSkip = (testCase: TestCase, project: Project, errorMessage?: str
 
 export const addSuccess = (testCase: TestCase, project: Project) => Promise.all( reporters.map( reporter => reporter.addSuccess ? reporter.addSuccess( testCase, project ) : Promise.resolve() ) );
 
-export const report = (projects: Project[], testCases: TestCase[], duration: number) => Promise.all( reporters.map( reporter => reporter.report ? reporter.report( projects, testCases, duration ) : Promise.resolve() ) );
+export const report = (projects: Project[], testCases: TestCase[], durationMs: number) => Promise.all( reporters.map( reporter => reporter.report ? reporter.report( projects, testCases, durationMs ) : Promise.resolve() ) );

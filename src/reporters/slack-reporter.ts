@@ -1,8 +1,17 @@
 import { IncomingWebhook } from '@slack/webhook';
+import { Project } from '../../types/Project';
 import { Reporter } from '../../types/Reporter';
+import { TestCase } from '../../types/TestCase';
 import * as logger from '../logger';
 
-const results = [];
+type ReportResult = {
+    scenario: TestCase,
+    config: Project,
+    success: boolean,
+    message?: string | null,
+};
+
+const results: ReportResult[] = [];
 
 const getFailed = () => results.filter( r => !r.success );
 const getTotalFailed = () => getFailed().length;
@@ -31,7 +40,7 @@ const createReportBlocks = () => {
     return blocks;
 };
 
-export const SlackReporter: Reporter = {
+export default (slackWebhookUrl: string): Reporter => ({
     name: 'Slack Reporter',
 
     addFail(scenario, config, message) {
@@ -44,8 +53,8 @@ export const SlackReporter: Reporter = {
         return Promise.resolve();
     },
 
-    async report(instances, scenarios, duration) {
-        const webhook = new IncomingWebhook( process.env.SLACK_WEBHOOK_URL );
+    async report(instances, scenarios, durationMs) {
+        const webhook = new IncomingWebhook( slackWebhookUrl );
         logger.verbose( `Notify slack` );
 
         await webhook.send( {
@@ -55,7 +64,7 @@ export const SlackReporter: Reporter = {
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n:stopwatch: Duration: ~${ duration }s\n:runner:Scenarios: ${ scenarios }\n:computer: Instances: ${ instances }`,
+                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n:stopwatch: Duration: ~${ durationMs / 1000 }s\n:runner:Scenarios: ${ scenarios }\n:computer: Instances: ${ instances }`,
                     },
                 },
                 {
@@ -65,6 +74,4 @@ export const SlackReporter: Reporter = {
             ],
         } );
     },
-};
-
-export default SlackReporter;
+});

@@ -20,8 +20,8 @@ export const CLIReporter: Reporter = {
         return Promise.resolve();
     },
 
-    report(projects, testCases, duration) {
-        logger.info( `Test cases completed. Totals: ${ projects.length } projects, ${ testCases.length } test cases, ${ duration / 1000 }s ` );
+    report(projects, testCases, durationMs) {
+        logger.info( `Test cases completed. Totals: ${ projects.length } projects, ${ testCases.length } test cases, ${ durationMs / 1000 }s ` );
         return Promise.resolve();
     },
 };
