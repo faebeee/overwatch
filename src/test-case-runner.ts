@@ -7,8 +7,6 @@ const { chromium, Response } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
 const TIMEOUT = 10_000;
 
-
-
 export const createTestCaseRunner = (testCase: TestCase) => async (project: Project) => {
     if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );

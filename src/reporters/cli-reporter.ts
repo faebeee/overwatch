@@ -21,7 +21,7 @@ export const CLIReporter: Reporter = {
     },
 
     report(projects, testCases, durationMs) {
-        logger.info( `Test cases completed. Totals: ${ projects.length } projects, ${ testCases.length } test cases, ${ durationMs / 1000 }s ` );
+        logger.info( `Test cases completed. Totals: ${ projects.length } projects, ${ testCases.length } test cases, ${ Math.round( durationMs / 1000 ) }s ` );
         return Promise.resolve();
     },
 };
