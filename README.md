@@ -23,4 +23,4 @@ overwatch( [], './projects/**/*.js', './test-cases/**/*.js');
 
 __CLI Output__
 
-![CLI Output](./assets/cli-output.png)
+![CLI Output](https://github.com/faebeee/overwatch/raw/master/assets/cli-output.png)
