@@ -10,4 +10,17 @@ if some tests fail.
 Those test scenarios are executed using [playwright](https://playwright.dev/).
 
 ## How To
-Check out the example
+Check out the `example` folder for project and test case configuration.
+
+```js
+import { addReporter, datadogReporter, slackReporter, overwatch } from 'ui-overwatch';
+
+addReporter( slackReporter( process.env.SLACK_WEBHOOK_URL ) );
+addReporter( datadogReporter( process.env.DD_CLIENT_API_KEY ) );
+
+overwatch( [], './projects/**/*.js', './test-cases/**/*.js');
+```
+
+__CLI Output__
+
+![CLI Output](./assets/cli-output.png)
