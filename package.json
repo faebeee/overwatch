@@ -5,7 +5,7 @@
     "main": "out/index.js",
     "scripts": {
         "generate:doc": "npx typedoc types ./src/index.ts",
-        "build": "tsc"
+        "build": "tsc && npm run generate:doc"
     },
     "author": "",
     "license": "ISC",
