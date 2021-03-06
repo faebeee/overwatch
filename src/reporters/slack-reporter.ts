@@ -40,6 +40,12 @@ const createReportBlocks = () => {
     return blocks;
 };
 
+/**
+ * Creates a slack reporter. This will create a list of failed/succeeded test cases and send
+ * them to a webhook
+ *
+ * @param slackWebhookUrl
+ */
 export default (slackWebhookUrl: string): Reporter => ({
     name: 'Slack Reporter',
 

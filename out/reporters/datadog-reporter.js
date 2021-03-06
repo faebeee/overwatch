@@ -76,6 +76,11 @@ var submitEvent = function (environment, apiKey, scenario, config, successful, m
     logger.debug("Sending event to datadog " + JSON.stringify(data));
     return axios_1.default.post("https://api.datadoghq.com/api/v1/events?api_key=" + apiKey, data);
 };
+/**
+ * Creates a reporter to report failed/succeeded test cases to a datadog instance
+ * @param dataDogClientApiKey
+ * @param environment
+ */
 exports.default = (function (dataDogClientApiKey, environment) {
     if (environment === void 0) { environment = process.env.NODE_ENV || 'development'; }
     return ({

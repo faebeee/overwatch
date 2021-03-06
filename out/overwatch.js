@@ -45,6 +45,12 @@ var cli_reporter_1 = __importDefault(require("./reporters/cli-reporter"));
 var project_schema_1 = require("./schemas/project-schema");
 var test_case_schema_1 = require("./schemas/test-case-schema");
 var test_executor_1 = require("./test-executor");
+/**
+ * Main executing function
+ * @param environments List of envrionments. This will filter the loaded projects and test cases
+ * @param configFilePattern glob pattern relative to `process.cwd()` to load project config files
+ * @param testCaseFilePattern glob pattern relative to `process.cwd()` to load test case files
+ */
 exports.default = (function (environments, configFilePattern, testCaseFilePattern) { return __awaiter(void 0, void 0, void 0, function () {
     var testCases, projects;
     return __generator(this, function (_a) {

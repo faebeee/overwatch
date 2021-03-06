@@ -23,6 +23,11 @@ const submitEvent = (environment: string, apiKey: string, scenario: TestCase, co
     return axios.post( `https://api.datadoghq.com/api/v1/events?api_key=${ apiKey }`, data );
 };
 
+/**
+ * Creates a reporter to report failed/succeeded test cases to a datadog instance
+ * @param dataDogClientApiKey
+ * @param environment
+ */
 export default (dataDogClientApiKey: string, environment = process.env.NODE_ENV || 'development'): Reporter => ({
     name: 'DataDog Reporter',
     async addFail(scenario, config, message) {

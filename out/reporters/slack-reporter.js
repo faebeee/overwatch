@@ -87,6 +87,12 @@ var createReportBlocks = function () {
     }
     return blocks;
 };
+/**
+ * Creates a slack reporter. This will create a list of failed/succeeded test cases and send
+ * them to a webhook
+ *
+ * @param slackWebhookUrl
+ */
 exports.default = (function (slackWebhookUrl) { return ({
     name: 'Slack Reporter',
     addFail: function (scenario, config, message) {
