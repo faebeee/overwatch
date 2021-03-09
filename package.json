@@ -1,8 +1,14 @@
 {
     "name": "ui-overwatch",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Create end to end tests and run them against you application running on different instances/servers",
-    "keywords": ["testing", "end to end", "e2e", "frontend", "playwright"],
+    "keywords": [
+        "testing",
+        "end to end",
+        "e2e",
+        "frontend",
+        "playwright"
+    ],
     "main": "out/index.js",
     "scripts": {
         "generate:doc": "npx typedoc types ./src/index.ts",
