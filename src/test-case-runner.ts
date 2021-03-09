@@ -1,3 +1,5 @@
+import { Page } from 'playwright';
+import { PageEvent } from 'typedoc/dist/lib/output/events';
 import { Project } from '../types/Project';
 import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
@@ -7,10 +9,27 @@ const { chromium } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
 const TIMEOUT = 10_000;
 
+const execTestCase = async (testCase: TestCase, project: Project, page: Page) => {
+    if (project.pre) {
+        await project.pre( page );
+    }
+
+    if (testCase.requireAuth && project.loginScript) {
+        await project.loginScript( page );
+    }
+
+    const timeout = setTimeout( () => {
+        throw new Error( `${ testCase.name } timed out on ${ project.name }` );
+    }, TIMEOUT );
+    await testCase.exec( project, page );
+    clearTimeout( timeout );
+}
+
 export const createTestCaseRunner = (testCase: TestCase) => async (project: Project) => {
     if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );
     }
+    
     if (testCase.requireAuth && !project.loginScript) {
         return addFail( testCase, project, `Login implementation required` );
     }
@@ -26,19 +45,7 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
             }
         } );
 
-        if (project.pre) {
-            await project.pre( page );
-        }
-
-        if (testCase.requireAuth && project.loginScript) {
-            await project.loginScript( page );
-        }
-
-        const timeout = setTimeout( () => {
-            throw new Error( `${ testCase.name } timed out on ${ project.name }` );
-        }, TIMEOUT );
-        await testCase.exec( project, page );
-        clearTimeout( timeout );
+        await execTestCase(testCase, project, page);
         await browser.close();
         return addSuccess( testCase, project );
     } catch (error) {
