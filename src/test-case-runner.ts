@@ -1,5 +1,4 @@
 import { Page } from 'playwright';
-import { PageEvent } from 'typedoc/dist/lib/output/events';
 import { Project } from '../types/Project';
 import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
@@ -25,11 +24,11 @@ const execTestCase = async (testCase: TestCase, project: Project, page: Page) =>
     clearTimeout( timeout );
 }
 
-export const createTestCaseRunner = (testCase: TestCase) => async (project: Project) => {
+export const createTestCaseRunner = async (testCase: TestCase, project: Project) => {
     if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );
     }
-    
+
     if (testCase.requireAuth && !project.loginScript) {
         return addFail( testCase, project, `Login implementation required` );
     }
@@ -45,7 +44,7 @@ export const createTestCaseRunner = (testCase: TestCase) => async (project: Proj
             }
         } );
 
-        await execTestCase(testCase, project, page);
+        await execTestCase( testCase, project, page );
         await browser.close();
         return addSuccess( testCase, project );
     } catch (error) {
