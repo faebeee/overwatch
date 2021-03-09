@@ -41,7 +41,7 @@ var perf_hooks_1 = require("perf_hooks");
 var reporter_1 = require("./reporter");
 var test_case_runner_1 = require("./test-case-runner");
 var testExecutor = function (testCases, projects) { return __awaiter(void 0, void 0, void 0, function () {
-    var then, t, testCaseRunner, p, now;
+    var then, t, p, now;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -50,12 +50,11 @@ var testExecutor = function (testCases, projects) { return __awaiter(void 0, voi
                 _a.label = 1;
             case 1:
                 if (!(t < testCases.length)) return [3 /*break*/, 6];
-                testCaseRunner = test_case_runner_1.createTestCaseRunner(testCases[t]);
                 p = 0;
                 _a.label = 2;
             case 2:
                 if (!(p < projects.length)) return [3 /*break*/, 5];
-                return [4 /*yield*/, testCaseRunner(projects[p])];
+                return [4 /*yield*/, test_case_runner_1.createTestCaseRunner(testCases[t], projects[p])];
             case 3:
                 _a.sent();
                 _a.label = 4;

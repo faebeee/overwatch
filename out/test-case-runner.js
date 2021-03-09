@@ -42,8 +42,36 @@ var should_testcase_be_skipped_1 = require("./utils/should-testcase-be-skipped")
 var chromium = require('playwright').chromium;
 var ERROR_CODES = [400, 403, 404, 500, 502, 503];
 var TIMEOUT = 10000;
-var createTestCaseRunner = function (testCase) { return function (project) { return __awaiter(void 0, void 0, void 0, function () {
-    var browser, page, timeout, error_1;
+var execTestCase = function (testCase, project, page) { return __awaiter(void 0, void 0, void 0, function () {
+    var timeout;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!project.pre) return [3 /*break*/, 2];
+                return [4 /*yield*/, project.pre(page)];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
+                if (!(testCase.requireAuth && project.loginScript)) return [3 /*break*/, 4];
+                return [4 /*yield*/, project.loginScript(page)];
+            case 3:
+                _a.sent();
+                _a.label = 4;
+            case 4:
+                timeout = setTimeout(function () {
+                    throw new Error(testCase.name + " timed out on " + project.name);
+                }, TIMEOUT);
+                return [4 /*yield*/, testCase.exec(project, page)];
+            case 5:
+                _a.sent();
+                clearTimeout(timeout);
+                return [2 /*return*/];
+        }
+    });
+}); };
+var createTestCaseRunner = function (testCase, project) { return __awaiter(void 0, void 0, void 0, function () {
+    var browser, page, error_1;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -62,44 +90,28 @@ var createTestCaseRunner = function (testCase) { return function (project) { ret
                 page = _b.sent();
                 _b.label = 3;
             case 3:
-                _b.trys.push([3, 10, , 12]);
+                _b.trys.push([3, 6, , 8]);
                 // Only fetch the first response which SHOULD be the document itself (hopefully)
                 page.once('response', function (response) {
                     if (ERROR_CODES.includes(response.status)) {
                         throw new Error(response.statusText);
                     }
                 });
-                if (!project.pre) return [3 /*break*/, 5];
-                return [4 /*yield*/, project.pre(page)];
+                return [4 /*yield*/, execTestCase(testCase, project, page)];
             case 4:
                 _b.sent();
-                _b.label = 5;
-            case 5:
-                if (!(testCase.requireAuth && project.loginScript)) return [3 /*break*/, 7];
-                return [4 /*yield*/, project.loginScript(page)];
-            case 6:
-                _b.sent();
-                _b.label = 7;
-            case 7:
-                timeout = setTimeout(function () {
-                    throw new Error(testCase.name + " timed out on " + project.name);
-                }, TIMEOUT);
-                return [4 /*yield*/, testCase.exec(project, page)];
-            case 8:
-                _b.sent();
-                clearTimeout(timeout);
                 return [4 /*yield*/, browser.close()];
-            case 9:
+            case 5:
                 _b.sent();
                 return [2 /*return*/, reporter_1.addSuccess(testCase, project)];
-            case 10:
+            case 6:
                 error_1 = _b.sent();
                 return [4 /*yield*/, browser.close()];
-            case 11:
+            case 7:
                 _b.sent();
                 return [2 /*return*/, reporter_1.addFail(testCase, project, error_1.message)];
-            case 12: return [2 /*return*/];
+            case 8: return [2 /*return*/];
         }
     });
-}); }; };
+}); };
 exports.createTestCaseRunner = createTestCaseRunner;
