@@ -1,5 +1,6 @@
 # ui-overwatch
 [![Maintainability](https://api.codeclimate.com/v1/badges/d3df9380db1ac4b91171/maintainability)](https://codeclimate.com/github/faebeee/overwatch/maintainability)
+![npm](https://img.shields.io/npm/v/ui-overview?style=for-the-badge)
 
 `ui-overwatch` is a tool, which should help to keep the functionality
 of your UI/Application across instances working. This comes in handy,
