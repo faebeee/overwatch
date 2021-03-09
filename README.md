@@ -1,4 +1,6 @@
 # ui-overwatch
+[![Maintainability](https://api.codeclimate.com/v1/badges/d3df9380db1ac4b91171/maintainability)](https://codeclimate.com/github/faebeee/overwatch/maintainability)
+
 `ui-overwatch` is a tool, which should help to keep the functionality
 of your UI/Application across instances working. This comes in handy,
 if you have the same application running on several instances.
