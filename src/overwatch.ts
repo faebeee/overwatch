@@ -1,11 +1,7 @@
-import { Project } from '../types/Project';
-import { TestCase } from '../types/TestCase';
-import { configLoader } from './loader/config-loader';
+import { loadProjects, loadTestCases } from './index';
 import { addReporter } from './reporter';
 import CLIReporter from './reporters/cli-reporter';
-import { projectSchema } from './schemas/project-schema';
-import { testCaseSchema } from './schemas/test-case-schema';
-import { testExecutor } from './test-executor';
+import { runner } from './runner';
 
 /**
  * Main executing function
@@ -16,7 +12,7 @@ import { testExecutor } from './test-executor';
 export default async (environments: string[], configFilePattern: string, testCaseFilePattern: string) => {
     addReporter( CLIReporter )
 
-    const testCases = await configLoader<TestCase>( testCaseFilePattern, environments, testCaseSchema );
-    const projects = await configLoader<Project>( configFilePattern, environments, projectSchema );
-    await testExecutor( testCases, projects );
+    const testCases = await loadTestCases( environments, testCaseFilePattern );
+    const projects = await loadProjects( environments, configFilePattern );
+    await runner( testCases, projects );
 };

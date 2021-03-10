@@ -12,9 +12,13 @@ if some tests fail.
 
 Those test scenarios are executed using [playwright](https://playwright.dev/).
 
+## Install
+`npm install ui-overwatch`
+
 ## How To
 Check out the `example` folder for project and test case configuration.
 
+Provide the file pattern and let overwatch do the magic
 ```js
 import { addReporter, datadogReporter, slackReporter, overwatch } from 'ui-overwatch';
 
@@ -22,6 +26,22 @@ addReporter( slackReporter( process.env.SLACK_WEBHOOK_URL ) );
 addReporter( datadogReporter( process.env.DD_CLIENT_API_KEY ) );
 
 overwatch( [], './projects/**/*.js', './test-cases/**/*.js');
+```
+
+Or load the files and pass the objects into the runner. This way you can have your own
+implementation of config files.
+
+```js
+import { addReporter, datadogReporter, slackReporter, runner, loadProjects, loadTestCases } from 'ui-overwatch';
+
+addReporter( slackReporter( process.env.SLACK_WEBHOOK_URL ) );
+addReporter( datadogReporter( process.env.DD_CLIENT_API_KEY ) );
+
+const environments = ['prod'];
+const projects = await loadProject(environments, './projects/**/*.js');
+const testCases = await loadTestCases(environments, './test-cases/**/*.js');
+
+await runner(testCases, projects);
 ```
 
 __CLI Output__
