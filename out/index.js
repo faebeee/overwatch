@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.overwatch = exports.addReporter = exports.slackReporter = exports.datadogReporter = void 0;
+exports.overwatch = exports.addReporter = exports.slackReporter = exports.datadogReporter = exports.runner = exports.loadProjects = exports.loadTestCases = void 0;
+var config_loader_1 = require("./loader/config-loader");
 var overwatch_1 = __importDefault(require("./overwatch"));
 exports.overwatch = overwatch_1.default;
 var reporter_1 = require("./reporter");
@@ -12,3 +13,11 @@ var datadog_reporter_1 = __importDefault(require("./reporters/datadog-reporter")
 exports.datadogReporter = datadog_reporter_1.default;
 var slack_reporter_1 = __importDefault(require("./reporters/slack-reporter"));
 exports.slackReporter = slack_reporter_1.default;
+var project_schema_1 = require("./schemas/project-schema");
+var test_case_schema_1 = require("./schemas/test-case-schema");
+var runner_1 = require("./runner");
+Object.defineProperty(exports, "runner", { enumerable: true, get: function () { return runner_1.runner; } });
+var loadTestCases = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments, test_case_schema_1.testCaseSchema); };
+exports.loadTestCases = loadTestCases;
+var loadProjects = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments, project_schema_1.projectSchema); };
+exports.loadProjects = loadProjects;

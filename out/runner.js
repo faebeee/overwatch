@@ -35,36 +35,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var index_1 = require("./index");
+exports.runner = void 0;
+var perf_hooks_1 = require("perf_hooks");
 var reporter_1 = require("./reporter");
-var cli_reporter_1 = __importDefault(require("./reporters/cli-reporter"));
-var runner_1 = require("./runner");
-/**
- * Main executing function
- * @param environments List of envrionments. This will filter the loaded projects and test cases
- * @param configFilePattern glob pattern relative to `process.cwd()` to load project config files
- * @param testCaseFilePattern glob pattern relative to `process.cwd()` to load test case files
- */
-exports.default = (function (environments, configFilePattern, testCaseFilePattern) { return __awaiter(void 0, void 0, void 0, function () {
-    var testCases, projects;
+var test_case_runner_1 = require("./test-case-runner");
+var runner = function (testCases, projects) { return __awaiter(void 0, void 0, void 0, function () {
+    var then, t, p, now;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                reporter_1.addReporter(cli_reporter_1.default);
-                return [4 /*yield*/, index_1.loadTestCases(environments, testCaseFilePattern)];
+                then = perf_hooks_1.performance.now();
+                t = 0;
+                _a.label = 1;
             case 1:
-                testCases = _a.sent();
-                return [4 /*yield*/, index_1.loadProjects(environments, configFilePattern)];
+                if (!(t < testCases.length)) return [3 /*break*/, 6];
+                p = 0;
+                _a.label = 2;
             case 2:
-                projects = _a.sent();
-                return [4 /*yield*/, runner_1.runner(testCases, projects)];
+                if (!(p < projects.length)) return [3 /*break*/, 5];
+                return [4 /*yield*/, test_case_runner_1.createTestCaseRunner(testCases[t], projects[p])];
             case 3:
                 _a.sent();
+                _a.label = 4;
+            case 4:
+                p++;
+                return [3 /*break*/, 2];
+            case 5:
+                t++;
+                return [3 /*break*/, 1];
+            case 6:
+                now = perf_hooks_1.performance.now();
+                reporter_1.report(projects, testCases, now - then);
                 return [2 /*return*/];
         }
     });
-}); });
+}); };
+exports.runner = runner;

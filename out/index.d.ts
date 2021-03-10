@@ -1,5 +1,10 @@
+import { Project } from '../types/Project';
+import { TestCase } from '../types/TestCase';
 import overwatch from './overwatch';
 import { addReporter } from './reporter';
 import datadogReporter from './reporters/datadog-reporter';
 import slackReporter from './reporters/slack-reporter';
-export { datadogReporter, slackReporter, addReporter, overwatch, };
+import { runner } from './runner';
+export declare const loadTestCases: (environments: string[], filePattern: string) => Promise<TestCase[]>;
+export declare const loadProjects: (environments: string[], filePattern: string) => Promise<Project[]>;
+export { runner, datadogReporter, slackReporter, addReporter, overwatch, };
