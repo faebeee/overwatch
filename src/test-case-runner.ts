@@ -1,12 +1,8 @@
-import Joi from 'joi';
 import { Page } from 'playwright';
 import { Project } from '../types/Project';
 import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
-import { projectSchema } from './schemas/project-schema';
-import { testCaseSchema } from './schemas/test-case-schema';
 import { shouldTestcaseBeSkipped } from './utils/should-testcase-be-skipped';
-import * as logger from './logger';
 
 const { chromium } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
@@ -24,8 +20,13 @@ const execTestCase = async (testCase: TestCase, project: Project, page: Page) =>
     const timeout = setTimeout( () => {
         throw new Error( `${ testCase.name } timed out on ${ project.name }` );
     }, TIMEOUT );
-    await testCase.exec( project, page );
-    clearTimeout( timeout );
+    try {
+        await testCase.exec( project, page );
+        clearTimeout( timeout );
+    } catch (e) {
+        clearTimeout( timeout );
+        throw e;
+    }
 }
 
 export const createTestCaseRunner = async (testCase: TestCase, project: Project) => {

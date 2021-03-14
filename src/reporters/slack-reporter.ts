@@ -14,6 +14,7 @@ type ReportResult = {
 const results: ReportResult[] = [];
 
 const getFailed = () => results.filter( r => !r.success );
+const getSuccess = () => results.filter( r => r.success );
 const getTotalFailed = () => getFailed().length;
 const hasFailed = () => getTotalFailed() > 0;
 
@@ -70,7 +71,17 @@ export default (slackWebhookUrl: string): Reporter => ({
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n:stopwatch: Duration: ~${ Math.round(durationMs / 1000) }s\n:runner:Scenarios: ${ scenarios.length }\n:computer: Instances: ${ instances.length }`,
+                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n\nSummary\n:white_check_mark: ${ getSuccess().length } succeeded\n:x: ${ getFailed().length } failed`,
+                    },
+                },
+                {
+                    type: 'divider',
+                },
+                {
+                    type: 'section',
+                    text: {
+                        type: 'mrkdwn',
+                        text: `Overview\n:stopwatch: Duration: ~${ Math.round(durationMs / 1000) }s\n:runner: Scenarios: ${ scenarios.length }\n:computer: Instances: ${ instances.length }`,
                     },
                 },
                 {

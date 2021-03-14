@@ -64,6 +64,7 @@ var webhook_1 = require("@slack/webhook");
 var logger = __importStar(require("../logger"));
 var results = [];
 var getFailed = function () { return results.filter(function (r) { return !r.success; }); };
+var getSuccess = function () { return results.filter(function (r) { return r.success; }); };
 var getTotalFailed = function () { return getFailed().length; };
 var hasFailed = function () { return getTotalFailed() > 0; };
 var createReportBlocks = function () {
@@ -118,7 +119,17 @@ exports.default = (function (slackWebhookUrl) { return ({
                                         type: 'section',
                                         text: {
                                             type: 'mrkdwn',
-                                            text: (hasFailed() ? ':x:' : ':rocket:') + " E2E tests completed.\n:stopwatch: Duration: ~" + Math.round(durationMs / 1000) + "s\n:runner:Scenarios: " + scenarios.length + "\n:computer: Instances: " + instances.length,
+                                            text: (hasFailed() ? ':x:' : ':rocket:') + " E2E tests completed.\n\nSummary\n:white_check_mark: " + getSuccess().length + " succeeded\n:x: " + getFailed().length + " failed",
+                                        },
+                                    },
+                                    {
+                                        type: 'divider',
+                                    },
+                                    {
+                                        type: 'section',
+                                        text: {
+                                            type: 'mrkdwn',
+                                            text: "Overview\n:stopwatch: Duration: ~" + Math.round(durationMs / 1000) + "s\n:runner: Scenarios: " + scenarios.length + "\n:computer: Instances: " + instances.length,
                                         },
                                     },
                                     {

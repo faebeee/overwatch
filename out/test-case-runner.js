@@ -43,7 +43,7 @@ var chromium = require('playwright').chromium;
 var ERROR_CODES = [400, 403, 404, 500, 502, 503];
 var TIMEOUT = 10000;
 var execTestCase = function (testCase, project, page) { return __awaiter(void 0, void 0, void 0, function () {
-    var timeout;
+    var timeout, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -62,11 +62,19 @@ var execTestCase = function (testCase, project, page) { return __awaiter(void 0,
                 timeout = setTimeout(function () {
                     throw new Error(testCase.name + " timed out on " + project.name);
                 }, TIMEOUT);
-                return [4 /*yield*/, testCase.exec(project, page)];
+                _a.label = 5;
             case 5:
+                _a.trys.push([5, 7, , 8]);
+                return [4 /*yield*/, testCase.exec(project, page)];
+            case 6:
                 _a.sent();
                 clearTimeout(timeout);
-                return [2 /*return*/];
+                return [3 /*break*/, 8];
+            case 7:
+                e_1 = _a.sent();
+                clearTimeout(timeout);
+                throw e_1;
+            case 8: return [2 /*return*/];
         }
     });
 }); };
