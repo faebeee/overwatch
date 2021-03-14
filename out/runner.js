@@ -59,12 +59,30 @@ exports.runner = void 0;
 var perf_hooks_1 = require("perf_hooks");
 var logger = __importStar(require("./logger"));
 var reporter_1 = require("./reporter");
+var project_schema_1 = require("./schemas/project-schema");
+var test_case_schema_1 = require("./schemas/test-case-schema");
 var test_case_runner_1 = require("./test-case-runner");
+var validateConfig = function (config, schema) {
+    var _a = schema.validate(config), value = _a.value, error = _a.error;
+    if (error) {
+        throw new Error(error.message);
+    }
+    return value;
+};
 var runner = function (testCases, projects) { return __awaiter(void 0, void 0, void 0, function () {
     var then, t, p, now;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                logger.verbose("Validate " + testCases.length + " test case(s) and " + projects.length + " project(s)");
+                testCases.forEach(function (testCase) {
+                    logger.debug("Validate testCase " + testCase.name);
+                    validateConfig(testCase, test_case_schema_1.testCaseSchema);
+                });
+                projects.forEach(function (project) {
+                    logger.debug("Validate project config " + project.name);
+                    validateConfig(project, project_schema_1.projectSchema);
+                });
                 logger.info("Running " + testCases.length + " test case(s) on " + projects.length + " project(s)");
                 then = perf_hooks_1.performance.now();
                 t = 0;

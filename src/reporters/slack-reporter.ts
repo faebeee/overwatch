@@ -70,7 +70,7 @@ export default (slackWebhookUrl: string): Reporter => ({
                     type: 'section',
                     text: {
                         type: 'mrkdwn',
-                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n:stopwatch: Duration: ~${ durationMs / 1000 }s\n:runner:Scenarios: ${ scenarios }\n:computer: Instances: ${ instances }`,
+                        text: `${ hasFailed() ? ':x:' : ':rocket:' } E2E tests completed.\n:stopwatch: Duration: ~${ Math.round(durationMs / 1000) }s\n:runner:Scenarios: ${ scenarios.length }\n:computer: Instances: ${ instances.length }`,
                     },
                 },
                 {
