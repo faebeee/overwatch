@@ -13,5 +13,5 @@ export const runner = async (testCases: TestCase[], projects: Project[]) => {
     }
 
     const now = performance.now();
-    report( projects, testCases, now - then );
+    await report( projects, testCases, now - then );
 }

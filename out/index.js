@@ -13,11 +13,9 @@ var datadog_reporter_1 = __importDefault(require("./reporters/datadog-reporter")
 exports.datadogReporter = datadog_reporter_1.default;
 var slack_reporter_1 = __importDefault(require("./reporters/slack-reporter"));
 exports.slackReporter = slack_reporter_1.default;
-var project_schema_1 = require("./schemas/project-schema");
-var test_case_schema_1 = require("./schemas/test-case-schema");
 var runner_1 = require("./runner");
 Object.defineProperty(exports, "runner", { enumerable: true, get: function () { return runner_1.runner; } });
-var loadTestCases = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments, test_case_schema_1.testCaseSchema); };
+var loadTestCases = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments); };
 exports.loadTestCases = loadTestCases;
-var loadProjects = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments, project_schema_1.projectSchema); };
+var loadProjects = function (environments, filePattern) { return config_loader_1.configLoader(filePattern, environments); };
 exports.loadProjects = loadProjects;

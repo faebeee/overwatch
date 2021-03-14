@@ -9,8 +9,8 @@ import { projectSchema } from './schemas/project-schema';
 import { testCaseSchema } from './schemas/test-case-schema';
 import { runner } from './runner';
 
-export const loadTestCases = (environments: string[], filePattern: string) => configLoader<TestCase>( filePattern, environments, testCaseSchema );
-export const loadProjects = (environments: string[], filePattern: string) => configLoader<Project>( filePattern, environments, projectSchema );
+export const loadTestCases = (environments: string[], filePattern: string) => configLoader<TestCase>( filePattern, environments );
+export const loadProjects = (environments: string[], filePattern: string) => configLoader<Project>( filePattern, environments );
 
 export {
     runner,

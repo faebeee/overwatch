@@ -38,10 +38,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTestCaseRunner = void 0;
 var reporter_1 = require("./reporter");
+var project_schema_1 = require("./schemas/project-schema");
+var test_case_schema_1 = require("./schemas/test-case-schema");
 var should_testcase_be_skipped_1 = require("./utils/should-testcase-be-skipped");
 var chromium = require('playwright').chromium;
 var ERROR_CODES = [400, 403, 404, 500, 502, 503];
 var TIMEOUT = 10000;
+var validateConfig = function (config, schema) {
+    var _a = schema.validate(config), value = _a.value, error = _a.error;
+    if (error) {
+        throw new Error(error.message);
+    }
+    return value;
+};
 var execTestCase = function (testCase, project, page) { return __awaiter(void 0, void 0, void 0, function () {
     var timeout;
     return __generator(this, function (_a) {
@@ -76,6 +85,8 @@ var createTestCaseRunner = function (testCase, project) { return __awaiter(void 
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
+                validateConfig(testCase, test_case_schema_1.testCaseSchema);
+                validateConfig(project, project_schema_1.projectSchema);
                 if (should_testcase_be_skipped_1.shouldTestcaseBeSkipped(testCase, project)) {
                     return [2 /*return*/, reporter_1.addSkip(testCase, project)];
                 }

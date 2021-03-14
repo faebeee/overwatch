@@ -14,6 +14,11 @@
         "generate:doc": "npx typedoc types ./src/index.ts",
         "build": "tsc && npm run generate:doc"
     },
+    "repository": {
+        "url": "https://github.com/ui-overwatch/overwatch",
+        "type": "github"
+    },
+    "types": "./types/types.d.ts",
     "author": "faebeee@gmail.com",
     "license": "ISC",
     "dependencies": {

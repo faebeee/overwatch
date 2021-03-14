@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -59,10 +40,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configLoader = void 0;
-var logger = __importStar(require("../logger"));
 var filter_by_environment_1 = require("../utils/filter-by-environment");
 var load_files_1 = __importDefault(require("../utils/load-files"));
-var configLoader = function (filePattern, environmentFilter, schema) {
+var configLoader = function (filePattern, environmentFilter) {
     if (environmentFilter === void 0) { environmentFilter = []; }
     return __awaiter(void 0, void 0, void 0, function () {
         var files;
@@ -72,18 +52,7 @@ var configLoader = function (filePattern, environmentFilter, schema) {
                 case 1:
                     files = _a.sent();
                     return [2 /*return*/, files
-                            .filter(filter_by_environment_1.createEnvironmentFilter(environmentFilter))
-                            .map(function (config) {
-                            if (!schema) {
-                                return config;
-                            }
-                            logger.verbose("Validating config file");
-                            var _a = schema.validate(config), value = _a.value, error = _a.error;
-                            if (error) {
-                                throw new Error(error.message);
-                            }
-                            return value;
-                        })];
+                            .filter(filter_by_environment_1.createEnvironmentFilter(environmentFilter))];
             }
         });
     });

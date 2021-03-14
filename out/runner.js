@@ -66,7 +66,9 @@ var runner = function (testCases, projects) { return __awaiter(void 0, void 0, v
                 return [3 /*break*/, 1];
             case 6:
                 now = perf_hooks_1.performance.now();
-                reporter_1.report(projects, testCases, now - then);
+                return [4 /*yield*/, reporter_1.report(projects, testCases, now - then)];
+            case 7:
+                _a.sent();
                 return [2 /*return*/];
         }
     });

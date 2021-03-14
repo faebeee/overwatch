@@ -1,5 +1,5 @@
 node_modules
-example/configs
+../ui-overwatch-cli/example/configs
 
 .idea
 tsconfig.tsbuildinfo

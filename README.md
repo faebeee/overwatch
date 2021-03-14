@@ -15,6 +15,9 @@ Those test scenarios are executed using [playwright](https://playwright.dev/).
 ## Install
 `npm install ui-overwatch`
 
+## CLI
+Checkout [ui-overwatch-cli](https://github.com/ui-overwatch/overwatch-cli) project for the official CLI
+
 ## How To
 Check out the `example` folder for project and test case configuration.
 

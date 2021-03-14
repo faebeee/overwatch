@@ -1,12 +1,23 @@
+import Joi from 'joi';
 import { Page } from 'playwright';
 import { Project } from '../types/Project';
 import { TestCase } from '../types/TestCase';
 import { addFail, addSkip, addSuccess } from './reporter';
+import { projectSchema } from './schemas/project-schema';
+import { testCaseSchema } from './schemas/test-case-schema';
 import { shouldTestcaseBeSkipped } from './utils/should-testcase-be-skipped';
 
 const { chromium } = require( 'playwright' );
 const ERROR_CODES = [400, 403, 404, 500, 502, 503];
 const TIMEOUT = 10_000;
+
+const validateConfig = (config: TestCase | Project, schema: Joi.Schema) => {
+    const { value, error } = schema.validate( config );
+    if (error) {
+        throw new Error( error.message );
+    }
+    return value;
+}
 
 const execTestCase = async (testCase: TestCase, project: Project, page: Page) => {
     if (project.pre) {
@@ -25,6 +36,9 @@ const execTestCase = async (testCase: TestCase, project: Project, page: Page) =>
 }
 
 export const createTestCaseRunner = async (testCase: TestCase, project: Project) => {
+    validateConfig( testCase, testCaseSchema );
+    validateConfig( project, projectSchema );
+
     if (shouldTestcaseBeSkipped( testCase, project )) {
         return addSkip( testCase, project );
     }
